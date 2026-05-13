@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dinas Pendidikan Sumedang - SKB/PKBM 2026</title>
+  <meta name="description" content="Standar Pengelolaan Satuan Pendidikan Non Formal SKB/PKBM Tahun 2026 - Dinas Pendidikan Kabupaten Sumedang" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    .input { width: 100%; border-radius: .375rem; border: 1px solid #cbd5e1; padding: .5rem .75rem; font-size: .875rem; color: #1e293b; background: #fff; }
+    .input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,.4); }
+    .modal-overlay { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,.5); padding: 1rem; }
+    .modal-box { background: #fff; border-radius: .5rem; box-shadow: 0 10px 30px rgba(0,0,0,.2); width: 100%; max-width: 42rem; max-height: 90vh; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+    @media print {
+      body { background: #fff !important; }
+      nav, footer, .no-print { display: none !important; }
+      main { max-width: 100% !important; padding: 0 !important; }
+      .print-area { box-shadow: none !important; border: none !important; padding: 0 !important; }
+      table { font-size: 10pt; }
+      thead { display: table-header-group; }
+      tr { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-900 antialiased min-h-screen flex flex-col">
+  <!-- ============ NAVBAR ============ -->
+  <nav class="bg-slate-900 border-b-4 border-blue-500 shadow no-print sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 flex items-center h-16">
+      <a href="#beranda" data-route="beranda" class="flex items-center gap-3 mr-6">
+        <div class="hidden sm:flex items-center gap-3 text-white text-xs leading-tight">
+          <img
+            src="logo.png"
+            alt="Logo"
+            class="w-9 h-9 aspect-square object-contain drop-shadow"
+            onerror="this.style.display='none';"
+          />
+          <div class="flex flex-col">
+            <div class="font-bold">DISDIK SUMEDANG</div>
+            <div class="text-slate-300 text-[10px]">SKB/PKBM 2026</div>
+          </div>
+        </div>
+      </a>
+      <div class="hidden md:flex items-center gap-1" id="nav-links">
+        <a href="#beranda" data-route="beranda" class="nav-link px-4 py-2 rounded text-sm font-medium text-white hover:bg-slate-700 transition-colors">Beranda</a>
+        <div class="relative" id="dropdown-wrap">
+          <button id="dropdown-btn" class="px-4 py-2 rounded text-sm font-medium text-white hover:bg-slate-700 transition-colors">
+            Informasi <span class="ml-1 text-xs">▼</span>
+          </button>
+          <div id="dropdown-menu" class="hidden absolute left-0 mt-1 w-72 bg-white rounded-md shadow-lg ring-1 ring-black/5 z-50 overflow-hidden">
+            <a href="#akreditasi" data-route="akreditasi" class="block px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 border-b border-slate-100">Data Akreditasi</a>
+            <a href="#peserta-didik" data-route="peserta-didik" class="block px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700 border-b border-slate-100">Data Peserta Didik SPMB ATS/APS</a>
+            <a href="#e-rapor" data-route="e-rapor" class="block px-4 py-3 text-sm text-slate-700 hover:bg-blue-50 hover:text-blue-700">Data E-Rapor 8 SNP SKB/PKBM</a>
+          </div>
+        </div>
+        <a href="#keterangan" data-route="keterangan" class="nav-link px-4 py-2 rounded text-sm font-medium text-white hover:bg-slate-700 transition-colors">Keterangan</a>
+      </div>
+      <button id="mobile-toggle" class="md:hidden ml-auto text-white p-2" aria-label="Menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="hidden md:hidden bg-slate-800 border-t border-slate-700">
+      <div class="px-4 py-3 flex flex-col gap-1">
+        <a href="#beranda" data-route="beranda" class="nav-link-mobile px-3 py-2 rounded text-white hover:bg-slate-700 text-sm">Beranda</a>
+        <div class="px-3 py-1 text-xs text-slate-400 uppercase mt-2">Informasi</div>
+        <a href="#akreditasi" data-route="akreditasi" class="nav-link-mobile px-3 py-2 rounded text-white hover:bg-slate-700 text-sm">Data Akreditasi</a>
+        <a href="#peserta-didik" data-route="peserta-didik" class="nav-link-mobile px-3 py-2 rounded text-white hover:bg-slate-700 text-sm">Data Peserta Didik SPMB ATS/APS</a>
+        <a href="#e-rapor" data-route="e-rapor" class="nav-link-mobile px-3 py-2 rounded text-white hover:bg-slate-700 text-sm">Data E-Rapor 8 SNP SKB/PKBM</a>
+        <a href="#keterangan" data-route="keterangan" class="nav-link-mobile px-3 py-2 rounded text-white hover:bg-slate-700 text-sm">Keterangan</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="max-w-7xl w-full mx-auto px-4 py-8 flex-1">
+
+    <!-- ============ BERANDA ============ -->
+    <section id="page-beranda" class="page space-y-8">
+      <!-- Hero card with logo -->
+      <div class="bg-white rounded-lg shadow border-t-4 border-blue-500 p-8 md:p-12">
+        <div class="flex flex-col md:flex-row items-center gap-6">
+          <!-- Logo hero: gunakan logo.png bila tersedia, fallback ke SVG bila tidak ada -->
+          <div class="relative flex-shrink-0">
+            <img
+              src="logo.png"
+              alt="Logo"
+              class="w-28 h-28 md:w-32 md:h-32 aspect-square object-contain flex-shrink-0 drop-shadow-lg"
+              onerror="this.style.display='none'; document.getElementById('hero-logo-svg').style.display='block';"
+            />
+            <svg id="hero-logo-svg" viewBox="0 0 100 100" class="w-28 h-28 md:w-32 md:h-32 aspect-square object-contain flex-shrink-0 drop-shadow-lg" xmlns="http://www.w3.org/2000/svg" style="display:none">
+
+
+              <defs><radialGradient id="bgHero" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#fef3c7"/><stop offset="100%" stop-color="#15803d"/></radialGradient></defs>
+              <circle cx="50" cy="50" r="48" fill="url(#bgHero)" stroke="#fbbf24" stroke-width="3"/>
+              <path d="M 18 65 L 35 38 L 50 55 L 65 32 L 82 65 Z" fill="#15803d" stroke="#064e3b" stroke-width="1.5"/>
+              <circle cx="50" cy="32" r="7" fill="#fbbf24" stroke="#f59e0b" stroke-width="1"/>
+              <g stroke="#ca8a04" stroke-width="1.2" fill="#fde047">
+                <ellipse cx="20" cy="78" rx="2" ry="4" transform="rotate(-25 20 78)"/>
+                <ellipse cx="25" cy="82" rx="2" ry="4" transform="rotate(-15 25 82)"/>
+                <ellipse cx="80" cy="78" rx="2" ry="4" transform="rotate(25 80 78)"/>
+                <ellipse cx="75" cy="82" rx="2" ry="4" transform="rotate(15 75 82)"/>
+              </g>
+              <rect x="38" y="68" width="24" height="6" fill="#92400e" rx="1"/>
+              <text x="50" y="92" text-anchor="middle" font-size="9" font-weight="bold" fill="#fef3c7" font-family="serif">SMD</text>
+            </svg>
+          </div>
+          <div class="text-center md:text-left flex-1">
+            <h1 class="text-blue-600 font-bold text-lg md:text-2xl leading-relaxed">
+              DINAS PENDIDIKAN KABUPATEN SUMEDANG<br />
+              <span class="text-base md:text-xl">STANDAR PENGELOLAAN SATUAN PENDIDIKAN NON FORMAL</span><br />
+              <span class="text-base md:text-xl">PENYELENGGARAAN PENDIDIKAN KESETARAAN SKB/PKBM TAHUN 2026</span>
+            </h1>
+            <p class="mt-4 italic text-slate-500 text-sm md:text-base">
+              "MANAJEMEN BERBASIS SEKOLAH (MBS) DAN PENGELOLAAN SISTEM INFORMASI (DIGITALISASI)"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="quick-links"></div>
+
+      <!-- KPI cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="kpi-cards"></div>
+
+      <!-- Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="font-semibold text-slate-800">Laporan Data Akreditasi</h3>
+              <p class="text-xs text-slate-500 mt-1">Distribusi peringkat akreditasi lembaga</p>
+            </div>
+            <a href="#akreditasi" data-route="akreditasi" class="text-xs font-medium text-blue-600 hover:underline">Lihat detail →</a>
+          </div>
+          <div id="chart-akreditasi"></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="font-semibold text-slate-800">Laporan Peserta Didik SPMB ATS/APS</h3>
+              <p class="text-xs text-slate-500 mt-1">Komposisi peserta didik & status verval</p>
+            </div>
+            <a href="#peserta-didik" data-route="peserta-didik" class="text-xs font-medium text-blue-600 hover:underline">Lihat detail →</a>
+          </div>
+          <div id="chart-peserta"></div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 lg:col-span-2">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h3 class="font-semibold text-slate-800">Laporan E-Rapor 8 SNP SKB/PKBM</h3>
+              <p class="text-xs text-slate-500 mt-1">Rata-rata capaian Standar Nasional Pendidikan (%)</p>
+            </div>
+            <a href="#e-rapor" data-route="e-rapor" class="text-xs font-medium text-blue-600 hover:underline">Lihat detail →</a>
+          </div>
+          <div id="chart-erapor"></div>
+        </div>
+      </div>
+
+      <!-- Recent lists -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+            <h3 class="font-semibold text-slate-800 text-sm">Lembaga Terbaru (Akreditasi)</h3>
+            <a href="#akreditasi" data-route="akreditasi" class="text-xs text-blue-600 hover:underline">Semua →</a>
+          </div>
+          <ul id="recent-akreditasi" class="space-y-2"></ul>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+            <h3 class="font-semibold text-slate-800 text-sm">Input Peserta Didik Terbaru</h3>
+            <a href="#peserta-didik" data-route="peserta-didik" class="text-xs text-blue-600 hover:underline">Semua →</a>
+          </div>
+          <ul id="recent-peserta" class="space-y-2"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ AKREDITASI ============ -->
+    <section id="page-akreditasi" class="page">
+      <div class="bg-white rounded-lg shadow p-6 print-area">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 mb-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Data Akreditasi</h2>
+            <p class="text-xs text-slate-500 mt-0.5" id="ak-count"></p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative max-w-xs no-print">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="ak-search" placeholder="Cari NPSN, sekolah, kepala..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="ak-toolbar"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 text-left">
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">No</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">NPSN</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Nama Sekolah</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Alamat Sekolah</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Kepala Sekolah</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Akreditasi</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Tahun Akreditasi</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Berakhir Tahun</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide">Nomor SK</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide no-print">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="ak-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PESERTA DIDIK ============ -->
+    <section id="page-peserta-didik" class="page">
+      <div class="bg-white rounded-lg shadow p-6 print-area">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 mb-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Data Peserta Didik SPMB ATS/APS Pendidikan Non Formal 2026</h2>
+            <p class="text-xs text-slate-500 mt-0.5" id="pd-count"></p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative max-w-xs no-print">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="pd-search" placeholder="Cari NPSN, sekolah, kecamatan..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="pd-toolbar"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 text-left">
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">No</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">NPSN</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Nama Sekolah</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Alamat Sekolah</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Wil. Kecamatan</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Zonasi Kel/Desa</th>
+                <th colspan="2" class="px-3 py-2 font-semibold text-xs uppercase tracking-wide text-center border-b border-slate-200">Peserta Didik</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Jumlah</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Verval</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200 no-print">Aksi</th>
+              </tr>
+              <tr class="bg-slate-50 text-slate-600 text-left">
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Laki-Laki</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Perempuan</th>
+              </tr>
+            </thead>
+            <tbody id="pd-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ E-RAPOR ============ -->
+    <section id="page-e-rapor" class="page">
+      <div class="bg-white rounded-lg shadow p-6 print-area">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 mb-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Data E-Rapor 8 SNP SKB/PKBM</h2>
+            <p class="text-xs text-slate-500 mt-0.5" id="er-count"></p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <div class="relative max-w-xs no-print">
+              <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path stroke-linecap="round" d="m21 21-4.3-4.3"/></svg>
+              <input type="search" id="er-search" placeholder="Cari NPSN atau lembaga..." class="w-full pl-9 pr-3 py-2 border border-slate-300 rounded-md text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div id="er-toolbar"></div>
+          </div>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 text-left">
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">No</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">NPSN</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Nama Lembaga</th>
+                <th colspan="8" class="px-3 py-2 font-semibold text-xs uppercase tracking-wide text-center border-b border-slate-200">Standar Nasional Pendidikan</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">Keterisian 8 SNP SKB/PKBM</th>
+                <th rowspan="2" class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200 no-print">Aksi</th>
+              </tr>
+              <tr class="bg-slate-50 text-slate-600 text-left">
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">SKL</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Isi</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Proses</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Penilaian</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.PTK</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Sapras</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Pengelolaan</th>
+                <th class="px-3 py-3 font-semibold text-xs uppercase tracking-wide border-b border-slate-200">S.Pembiayaan</th>
+              </tr>
+            </thead>
+            <tbody id="er-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ KETERANGAN ============ -->
+    <section id="page-keterangan" class="page">
+      <div class="bg-white rounded-lg shadow p-8">
+        <h1 class="text-2xl font-bold text-slate-800 mb-6 border-b border-slate-200 pb-3">Keterangan Sistem</h1>
+        <section class="space-y-6 text-slate-700 text-sm leading-relaxed">
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">Tentang Sistem</h2>
+            <p>Sistem informasi pengelolaan satuan pendidikan non formal SKB/PKBM tahun 2026 di lingkungan Dinas Pendidikan Kabupaten Sumedang. Versi single-file ini di-host di GitHub Pages dan menyimpan data secara lokal di browser pengguna (localStorage).</p>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">Kategori Data</h2>
+            <ol class="list-decimal pl-5 space-y-2">
+              <li><strong>Data Akreditasi</strong> – Status akreditasi seluruh lembaga PKBM/SKB beserta tahun berlaku dan nomor SK.</li>
+              <li><strong>Data Peserta Didik SPMB ATS/APS</strong> – Rekapitulasi peserta didik baru jalur ATS/APS, gender, dan status verval.</li>
+              <li><strong>Data E-Rapor 8 SNP SKB/PKBM</strong> – Capaian 8 Standar Nasional Pendidikan.</li>
+            </ol>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">Fitur</h2>
+            <ul class="list-disc pl-5 space-y-1">
+              <li>Grafik laporan otomatis di Beranda untuk 3 kategori data.</li>
+              <li>Tombol <strong>+ Input Data</strong> dengan opsi pilihan dropdown.</li>
+              <li>Tombol <strong>Edit</strong> &amp; <strong>Hapus</strong> per baris.</li>
+              <li>Tombol <strong>Cetak</strong>, <strong>CSV</strong>, &amp; <strong>Unduh PDF</strong>.</li>
+              <li>Pencarian (search) per tabel.</li>
+            </ul>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">Legenda Warna</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="flex items-center gap-2"><span class="inline-block px-3 py-1 rounded text-xs font-semibold bg-emerald-200 text-emerald-900">●</span> Baik / Sudah / Berlaku</div>
+              <div class="flex items-center gap-2"><span class="inline-block px-3 py-1 rounded text-xs font-semibold bg-amber-200 text-amber-900">●</span> Cukup / Sedang</div>
+              <div class="flex items-center gap-2"><span class="inline-block px-3 py-1 rounded text-xs font-semibold bg-rose-200 text-rose-900">●</span> Kurang / Belum / Habis Berlaku</div>
+              <div class="flex items-center gap-2"><span class="inline-block px-3 py-1 rounded text-xs font-semibold bg-blue-100 text-blue-700">●</span> Informasi / Tautan</div>
+            </div>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">💾 Backup & Restore Data</h2>
+            <p class="mb-3 text-slate-600">Simpan seluruh data ke file JSON sebagai cadangan, atau pulihkan dari file backup sebelumnya.</p>
+            <div class="flex flex-wrap gap-2">
+              <button id="btn-backup" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+                Unduh Backup (.json)
+              </button>
+              <label class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-2 cursor-pointer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5-5 5 5M12 5v12"/></svg>
+                Restore dari File
+                <input id="file-restore" type="file" accept="application/json" class="hidden">
+              </label>
+            </div>
+            <p class="text-xs text-slate-500 mt-2">💡 Tip: Backup secara berkala karena data tersimpan di browser & bisa hilang jika cache dihapus.</p>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">📊 Status Penyimpanan Lokal</h2>
+            <div id="storage-info" class="bg-slate-50 border border-slate-200 rounded p-4 text-xs font-mono text-slate-700"></div>
+          </div>
+          <div>
+            <h2 class="font-semibold text-blue-700 mb-2">⚠️ Reset Data</h2>
+            <p class="mb-3">Klik tombol di bawah untuk menghapus semua data lokal dan kembali ke contoh awal.</p>
+            <button id="btn-reset" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded text-sm font-medium shadow">🗑 Reset Semua Data ke Contoh Awal</button>
+          </div>
+          <div class="text-xs text-slate-500 pt-6 border-t border-slate-200">
+            Sumber referensi: BAN-PDM / Pusat Data Pokok Pendidikan – Dinas Pendidikan Kabupaten Sumedang © 2026.
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white mt-12 py-6 text-center text-sm text-slate-500 no-print">
+    © 2026 Dinas Pendidikan Kabupaten Sumedang
+  </footer>
+
+  <script>
+  /* ================== STATE / DB (localStorage) ================== */
+  const STORAGE = { ak: 'sumedang.ak.v1', pd: 'sumedang.pd.v1', er: 'sumedang.er.v1' };
+  const SEED = {
+    ak: [
+      { id:1, npsn:'P2963449', namaSekolah:'PKBM MEKAR BUANA', alamatSekolah:'JL.ANGKREK NO.9BRT 4RW 2, Kel.Kotakaler, Kec. Sumedang Utara', kepalaSekolah:'EGI ZAENAL MUTAQIEN', akreditasi:'B', tahunAkreditasi:2017, berakhirTahun:2026, nomorSk:'No SK: -(Bukan program Kesetaraan)' },
+      { id:2, npsn:'P9934726', namaSekolah:'PKBM PASCA MARGA', alamatSekolah:'Jl. KLK No.72 RT.02 RW.02RT 1RW 3, Desa Rancamulya, Kec. Sumedang Utara', kepalaSekolah:'DEDEH KURAESIN', akreditasi:'B', tahunAkreditasi:2025, berakhirTahun:2030, nomorSk:'No SK: 602/BAN-PDM/SK/2025' },
+      { id:3, npsn:'P9952581', namaSekolah:'PKBM MULYASARI SEJATI', alamatSekolah:'Dsn. Kadupugur Rt 1/Rw 6 Desa Mulyasari Kec. Sumedang Utara', kepalaSekolah:'GRACY MEILANTA', akreditasi:'B', tahunAkreditasi:2024, berakhirTahun:2029, nomorSk:'No SK: 120/BAN-PDM/SK/2025' },
+      { id:4, npsn:'P9999789', namaSekolah:'PKBM AI-AMANAH', alamatSekolah:'Jl. Angkrek Gg. Karyawan II No. 08 RT. 003 RW. 018, Kel. Situ, Kec. Sumedang Utara', kepalaSekolah:'DEDI MUHAMMAD ISHAK', akreditasi:'C', tahunAkreditasi:2025, berakhirTahun:2030, nomorSk:'No SK: 602/BAN-PDM/SK/2025' },
+      { id:5, npsn:'P9984783', namaSekolah:'PKBM MENTARI MADANI', alamatSekolah:'Perum Jatihurip Blok 9 No. 111 Sumedang RT 4RW 14, Desa Jatihurip, Kec. Sumedang Utara', kepalaSekolah:'YANA SATRIANA', akreditasi:'C', tahunAkreditasi:2025, berakhirTahun:2030, nomorSk:'No SK: 602/BAN-PDM/SK/2025' },
+   ],
+    pd: [
+      { id:1, npsn:'P2963449', namaSekolah:'PKBM MEKAR BUANA', alamatSekolah:'JL.Angkrek NO.9BRT 4RW 2, Kel.Kotakaler', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Kota Kaler Kebonjati', lakiLaki:0, perempuan:0, verval:'Belum' },
+      { id:2, npsn:'P9934726', namaSekolah:'PKBM PASCA MARGA', alamatSekolah:'Jl. KLK No.72 RT.02 RW.02RT 1RW 3, Desa Rancamulya', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Rancamulya Talun', lakiLaki:0, perempuan:0, verval:'Belum' },
+      { id:3, npsn:'P9952581', namaSekolah:'PKBM MULYASARI SEJATI', alamatSekolah:'Dsn. Kadupugur Rt 1/Rw 6 Desa Mulyasari', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Mulyasari Sirnamulya', lakiLaki:2, perempuan:3, verval:'Sudah' },
+      { id:4, npsn:'P9999789', namaSekolah:'PKBM AI-AMANAH', alamatSekolah:'Jl. Angkrek Gg. Karyawan II No. 08 RT. 003 RW. 018, Kel. Situ', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Situ Mekarjaya', lakiLaki:0, perempuan:0, verval:'Belum' },
+      { id:5, npsn:'P9984783', namaSekolah:'PKBM MENTARI MADANI', alamatSekolah:'Perum Jatihurip Blok 9 No. 111 Sumedang RT 4RW 14 Desa Jatihurip', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Jatihurip Jatimulya', lakiLaki:0, perempuan:0, verval:'Belum' },
+      { id:6, npsn:'P9984784', namaSekolah:'PKBM MENTARI KREATIF MANDIRI', alamatSekolah:'Jl. Serma Muhtar NO 97 RT 1RW 7, Kel. Situ', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'Margamukti Padasuka', lakiLaki:4, perempuan:2, verval:'Sudah' },
+    ],
+    er: [
+      { id:1, npsn:'10123456', namaLembaga:'PKBM Bina Warga', skl:60, sIsi:60, sProses:40, sPenilaian:80, sPtk:30, sSapras:90, sPengelolaan:50, sPembiayaan:50, keterisian:'LENGKAP' },
+    ],
+  };
+  function load(key, seed) {
+    try { const r = localStorage.getItem(key); if (r) return JSON.parse(r); }
+    catch(e) { console.warn('Parse gagal untuk', key, e); }
+    try { localStorage.setItem(key, JSON.stringify(seed)); }
+    catch(e) { toast('localStorage tidak tersedia (mode private?)', 'error'); }
+    return seed;
+  }
+  function save(key, v) {
+    try { localStorage.setItem(key, JSON.stringify(v)); return true; }
+    catch(e) { toast('Gagal menyimpan: ' + e.message, 'error'); return false; }
+  }
+  function nextId(arr) { return arr.reduce((m,r)=>Math.max(m,Number(r.id)||0),0)+1; }
+  const DB = {
+    ak: { all: () => load(STORAGE.ak, SEED.ak), set: v => save(STORAGE.ak, v) },
+    pd: { all: () => load(STORAGE.pd, SEED.pd), set: v => save(STORAGE.pd, v) },
+    er: { all: () => load(STORAGE.er, SEED.er), set: v => save(STORAGE.er, v) },
+    reset: () => { localStorage.removeItem(STORAGE.ak); localStorage.removeItem(STORAGE.pd); localStorage.removeItem(STORAGE.er); },
+    export: () => {
+      const data = { version: 1, exportedAt: new Date().toISOString(), ak: DB.ak.all(), pd: DB.pd.all(), er: DB.er.all() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `backup-sumedang-${new Date().toISOString().slice(0,10)}.json`;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast('Backup berhasil diunduh', 'success');
+    },
+    import: async (file) => {
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (!Array.isArray(data.ak) || !Array.isArray(data.pd) || !Array.isArray(data.er)) {
+          throw new Error('Format backup tidak valid');
+        }
+        save(STORAGE.ak, data.ak); save(STORAGE.pd, data.pd); save(STORAGE.er, data.er);
+        toast('Restore berhasil. Memuat ulang...', 'success');
+        setTimeout(() => location.reload(), 1000);
+      } catch(e) { toast('Gagal restore: ' + e.message, 'error'); }
+    },
+  };
+
+  /* ================== TOAST NOTIFICATION ================== */
+  function toast(message, type) {
+    const colors = { success: 'bg-emerald-600', error: 'bg-rose-600', info: 'bg-slate-700', warning: 'bg-amber-500' };
+    const div = document.createElement('div');
+    div.className = `fixed bottom-6 right-6 z-[60] ${colors[type||'info']} text-white px-4 py-3 rounded-lg shadow-lg text-sm font-medium no-print`;
+    div.style.transition = 'opacity 0.3s, transform 0.3s';
+    div.style.transform = 'translateY(20px)'; div.style.opacity = '0';
+    div.textContent = message;
+    document.body.appendChild(div);
+    requestAnimationFrame(() => { div.style.transform = 'translateY(0)'; div.style.opacity = '1'; });
+    setTimeout(() => {
+      div.style.opacity = '0'; div.style.transform = 'translateY(20px)';
+      setTimeout(() => div.remove(), 300);
+    }, 2200);
+  }
+
+  /* ================== HELPERS ================== */
+  function esc(v) { if (v==null) return ''; return String(v).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[m]); }
+  function field(label, ctrl, req) { return `<label class="block"><span class="text-xs font-medium text-slate-700">${label} ${req?'<span class="text-rose-500">*</span>':''}</span><div class="mt-1">${ctrl}</div></label>`; }
+  const currentYear = new Date().getFullYear();
+
+  /* ================== ROUTER ================== */
+  function showPage(route) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('page-' + route) || document.getElementById('page-beranda');
+    target.classList.add('active');
+    // Highlight nav
+    document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(a => {
+      const r = a.dataset.route;
+      const informasi = ['akreditasi','peserta-didik','e-rapor'].includes(route);
+      if (r === route || (a.textContent.trim() === 'Informasi' && informasi)) {
+        a.classList.add('bg-slate-700');
+      } else {
+        a.classList.remove('bg-slate-700');
+      }
+    });
+    document.getElementById('mobile-menu').classList.add('hidden');
+    document.getElementById('dropdown-menu').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Render content for the page
+    if (route === 'beranda') renderBeranda();
+    else if (route === 'akreditasi') renderAkreditasi();
+    else if (route === 'peserta-didik') renderPeserta();
+    else if (route === 'e-rapor') renderERapor();
+  }
+  window.addEventListener('hashchange', () => {
+    const r = (location.hash || '#beranda').slice(1);
+    showPage(r);
+  });
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[data-route]');
+    if (a) { /* default href handles routing */ }
+  });
+
+  /* ================== MODAL ================== */
+  function openModal(title, bodyHtml, onMount) {
+    closeModal();
+    const w = document.createElement('div');
+    w.className = 'modal-overlay';
+    w.id = 'app-modal';
+    w.innerHTML = `<div class="modal-box"><div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 sticky top-0 bg-white z-10"><h3 class="text-lg font-semibold text-slate-800">${title}</h3><button id="modal-x" class="text-slate-400 hover:text-slate-700 text-2xl leading-none">×</button></div><div class="p-6" id="modal-body">${bodyHtml}</div></div>`;
+    document.body.appendChild(w);
+    document.body.style.overflow = 'hidden';
+    document.getElementById('modal-x').addEventListener('click', closeModal);
+    w.addEventListener('click', e => { if (e.target === w) closeModal(); });
+    document.addEventListener('keydown', escClose);
+    if (onMount) onMount(document.getElementById('modal-body'));
+  }
+  function closeModal() {
+    const m = document.getElementById('app-modal');
+    if (m) m.remove();
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', escClose);
+  }
+  function escClose(e) { if (e.key === 'Escape') closeModal(); }
+
+  /* ================== TOOLBAR (Print/CSV/PDF/Add) ================== */
+  function renderToolbar(containerId, opts) {
+    const root = document.getElementById(containerId);
+    root.innerHTML = `
+      <div class="flex flex-wrap items-center gap-2 no-print">
+        <button data-tb="print" class="bg-slate-700 hover:bg-slate-800 text-white px-3 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-1.5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2m-12 0v4h12v-4M6 18h12"/></svg>Cetak
+        </button>
+        <button data-tb="csv" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-1.5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17l-3-3m0 0l3-3m-3 3h12M3 7l9-4 9 4v10l-9 4-9-4V7z"/></svg>CSV
+        </button>
+        <button data-tb="pdf" class="bg-rose-600 hover:bg-rose-700 text-white px-3 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-1.5">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>PDF
+        </button>
+        <button data-tb="add" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm font-medium shadow inline-flex items-center gap-1.5"><span class="text-lg leading-none">+</span> Input Data</button>
+      </div>`;
+    root.querySelector('[data-tb="add"]').addEventListener('click', opts.onAdd);
+    root.querySelector('[data-tb="print"]').addEventListener('click', () => {
+      const orig = document.title; document.title = opts.printTitle || orig; window.print();
+      setTimeout(() => { document.title = orig; }, 500);
+    });
+    root.querySelector('[data-tb="csv"]').addEventListener('click', () => downloadCsv(opts.pdf));
+    root.querySelector('[data-tb="pdf"]').addEventListener('click', () => downloadPdf(opts.pdf));
+  }
+  function downloadCsv({ filename, columns, rows }) {
+    const e = s => `"${String(s).replace(/"/g,'""')}"`;
+    const csv = '\uFEFF' + columns.map(c=>e(c.header)).join(',') + '\n' + rows.map(r=>columns.map(c=>e(String(r[c.dataKey]??''))).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = filename.replace(/\.pdf$/i, '.csv');
+    document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+  }
+  function downloadPdf({ title, filename, columns, rows }) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'landscape', unit:'pt', format:'a4' });
+    const pw = doc.internal.pageSize.getWidth();
+    doc.setFontSize(13); doc.setFont('helvetica','bold');
+    doc.text('DINAS PENDIDIKAN KABUPATEN SUMEDANG', pw/2, 32, { align:'center' });
+    doc.setFontSize(11); doc.text(title, pw/2, 50, { align:'center' });
+    doc.setFontSize(8); doc.setFont('helvetica','normal');
+    doc.text('Dicetak: ' + new Date().toLocaleString('id-ID'), pw-40, 66, { align:'right' });
+    doc.autoTable({
+      startY: 80,
+      head: [columns.map(c => c.header)],
+      body: rows.map(r => columns.map(c => String(r[c.dataKey] ?? ''))),
+      styles: { fontSize: 8, cellPadding: 4, valign: 'middle' },
+      headStyles: { fillColor: [30,64,175], textColor: 255, fontStyle: 'bold' },
+      alternateRowStyles: { fillColor: [241,245,249] },
+      margin: { left: 24, right: 24 },
+    });
+    doc.save(filename);
+  }
+  function actionsHtml(id, kind) {
+    return `<div class="flex gap-1.5">
+      <button data-action="edit" data-id="${id}" data-kind="${kind}" class="px-2 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium inline-flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 113 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>
+      <button data-action="delete" data-id="${id}" data-kind="${kind}" class="px-2 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-xs font-medium inline-flex items-center gap-1"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14z"/></svg>Hapus</button>
+    </div>`;
+  }
+
+  /* ================== CHARTS ================== */
+  function chartAk(data) {
+    const entries = Object.entries(data);
+    const max = Math.max(1, ...entries.map(([,v])=>v));
+    const colors = { A:'#10b981', B:'#3b82f6', C:'#f59e0b', TT:'#ef4444', Belum:'#94a3b8' };
+    const W=480, H=240, padL=36, padB=32, padT=12, padR=12;
+    const cw = W-padL-padR, ch = H-padT-padB;
+    const bw = cw/entries.length - 16;
+    let svg = `<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto">`;
+    [0,.25,.5,.75,1].forEach(t => {
+      const y = padT+ch-ch*t;
+      svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e2e8f0"/><text x="${padL-6}" y="${y+4}" font-size="10" text-anchor="end" fill="#64748b">${Math.round(max*t)}</text>`;
+    });
+    entries.forEach(([k,v],i) => {
+      const x = padL + (cw/entries.length)*i + 8;
+      const h = (v/max)*ch, y = padT+ch-h;
+      svg += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${colors[k]||'#3b82f6'}" rx="4"/><text x="${x+bw/2}" y="${y-4}" font-size="11" text-anchor="middle" fill="#334155" font-weight="bold">${v}</text><text x="${x+bw/2}" y="${H-padB+16}" font-size="11" text-anchor="middle" fill="#475569">${k}</text>`;
+    });
+    svg += `</svg>`;
+    const legend = entries.map(([k]) => `<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:${colors[k]||'#3b82f6'}"></span><span class="text-slate-600">Akreditasi ${k}</span></div>`).join('');
+    return `${svg}<div class="flex flex-wrap gap-3 mt-3 text-xs">${legend}</div>`;
+  }
+  function donut(title, slices, total) {
+    const R=60, r=38, C=2*Math.PI*R; let acc=0; const safe = total===0?1:total;
+    let svg = `<svg viewBox="0 0 160 160" class="w-40 h-40" style="transform:rotate(-90deg)"><circle cx="80" cy="80" r="${R}" fill="none" stroke="#f1f5f9" stroke-width="${R-r}"/>`;
+    slices.forEach(s => {
+      const len = (s.value/safe)*C; const off = -acc; acc += len;
+      svg += `<circle cx="80" cy="80" r="${R}" fill="none" stroke="${s.color}" stroke-width="${R-r}" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${off}"/>`;
+    });
+    svg += `<text x="80" y="84" text-anchor="middle" font-size="20" font-weight="bold" fill="#1e293b" transform="rotate(90 80 80)">${total}</text></svg>`;
+    const legend = slices.map(s => `<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:${s.color}"></span><span class="text-slate-600">${s.label} <strong>${s.value}</strong></span></div>`).join('');
+    return `<div class="flex flex-col items-center"><h4 class="text-sm font-medium text-slate-700 mb-2">${title}</h4>${svg}<div class="flex flex-wrap gap-3 mt-2 justify-center text-xs">${legend}</div></div>`;
+  }
+  function chartPd({ laki, perempuan, sudah, belum }) {
+    return `<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">${donut('Komposisi Gender',[{label:'Laki-laki',value:laki,color:'#3b82f6'},{label:'Perempuan',value:perempuan,color:'#ec4899'}],laki+perempuan)}${donut('Status Verval',[{label:'Sudah',value:sudah,color:'#10b981'},{label:'Belum',value:belum,color:'#f59e0b'}],sudah+belum)}</div>`;
+  }
+  function chartEr(data) {
+    const entries = Object.entries(data);
+    const W=720, H=280, padL=44, padB=50, padT=16, padR=16;
+    const cw = W-padL-padR, ch = H-padT-padB;
+    const bw = cw/entries.length - 14;
+    const cf = v => v>=80?'#10b981':v>=60?'#f59e0b':v>=40?'#fbbf24':'#ef4444';
+    let svg = `<svg viewBox="0 0 ${W} ${H}" class="w-full h-auto">`;
+    [0,25,50,75,100].forEach(t => {
+      const y = padT+ch-(ch*t)/100;
+      svg += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="#e2e8f0"/><text x="${padL-6}" y="${y+4}" font-size="10" text-anchor="end" fill="#64748b">${t}%</text>`;
+    });
+    entries.forEach(([k,v],i) => {
+      const x = padL + (cw/entries.length)*i + 7;
+      const h = (v/100)*ch, y = padT+ch-h;
+      svg += `<rect x="${x}" y="${y}" width="${bw}" height="${h}" fill="${cf(v)}" rx="3"/><text x="${x+bw/2}" y="${y-4}" font-size="10" text-anchor="middle" fill="#334155" font-weight="bold">${v}%</text><text x="${x+bw/2}" y="${H-padB+14}" font-size="10" text-anchor="middle" fill="#475569">${k}</text>`;
+    });
+    svg += `</svg>`;
+    const li = (c,l) => `<div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded" style="background:${c}"></span><span class="text-slate-600">${l}</span></div>`;
+    return `${svg}<div class="flex flex-wrap gap-3 mt-3 text-xs">${li('#10b981','Baik (≥80%)')}${li('#f59e0b','Cukup (60-79%)')}${li('#fbbf24','Sedang (40-59%)')}${li('#ef4444','Kurang (<40%)')}</div>`;
+  }
+
+  /* ================== BERANDA ================== */
+  function renderBeranda() {
+    const ak = DB.ak.all(), pd = DB.pd.all(), er = DB.er.all();
+    // Quick links
+    document.getElementById('quick-links').innerHTML = [
+      ['#akreditasi','Data Akreditasi','Kelola status akreditasi lembaga','from-blue-500 to-blue-700','📋'],
+      ['#peserta-didik','Peserta Didik SPMB','Rekap ATS/APS dengan verval','from-emerald-500 to-emerald-700','👥'],
+      ['#e-rapor','E-Rapor 8 SNP','Capaian Standar Nasional Pendidikan','from-rose-500 to-rose-700','📊'],
+    ].map(([h,t,d,c,i]) => `<a href="${h}" data-route="${h.slice(1)}" class="bg-gradient-to-br ${c} text-white p-5 rounded-lg shadow hover:shadow-lg transition-all hover:-translate-y-0.5 group"><div class="flex items-start gap-3"><div class="text-3xl">${i}</div><div class="flex-1"><div class="font-bold text-base">${t}</div><div class="text-xs text-white/80 mt-0.5">${d}</div><div class="text-xs mt-2 opacity-80">Buka →</div></div></div></a>`).join('');
+
+    // KPIs
+    const totalLaki = pd.reduce((s,p)=>s+Number(p.lakiLaki||0),0);
+    const totalP = pd.reduce((s,p)=>s+Number(p.perempuan||0),0);
+    const sudahV = pd.filter(p=>(p.verval||'').toLowerCase()==='sudah').length;
+    const belumV = pd.length - sudahV;
+    const vervalPct = pd.length===0?0:Math.round((sudahV/pd.length)*100);
+    const expired = ak.filter(a=>Number(a.berakhirTahun)<currentYear).length;
+    const expiringSoon = ak.filter(a=>Number(a.berakhirTahun)>=currentYear && Number(a.berakhirTahun)<=currentYear+1).length;
+
+    const kpis = [
+      ['Total Lembaga', ak.length, `${expired} expired, ${expiringSoon} berakhir ≤1 thn`, 'bg-blue-500'],
+      ['Total Peserta Didik', totalLaki+totalP, `${totalLaki} L · ${totalP} P`, 'bg-emerald-500'],
+      ['Status Verval', vervalPct+'%', `${sudahV} sudah · ${belumV} belum`, 'bg-amber-500'],
+      ['Lembaga E-Rapor', er.length, `${er.length} lembaga ter-input`, 'bg-rose-500'],
+    ];
+    document.getElementById('kpi-cards').innerHTML = kpis.map(([l,v,s,c]) =>
+      `<div class="bg-white rounded-lg shadow p-5"><div class="w-10 h-1 ${c} rounded mb-3"></div><div class="text-2xl md:text-3xl font-bold text-slate-800">${v}</div><div class="text-xs text-slate-500 mt-1">${l}</div><div class="text-[11px] text-slate-400 mt-1">${s}</div></div>`
+    ).join('');
+
+    // Charts
+    const akCounts = { A:0, B:0, C:0, TT:0, Belum:0 };
+    ak.forEach(a => { akCounts[a.akreditasi] = (akCounts[a.akreditasi]||0)+1; });
+    document.getElementById('chart-akreditasi').innerHTML = chartAk(akCounts);
+    document.getElementById('chart-peserta').innerHTML = chartPd({ laki:totalLaki, perempuan:totalP, sudah:sudahV, belum:belumV });
+    const avg = k => er.length===0?0:Math.round(er.reduce((s,r)=>s+Number(r[k]||0),0)/er.length);
+    document.getElementById('chart-erapor').innerHTML = chartEr({
+      'SKL':avg('skl'),'S.Isi':avg('sIsi'),'S.Proses':avg('sProses'),'S.Penilaian':avg('sPenilaian'),
+      'S.PTK':avg('sPtk'),'S.Sapras':avg('sSapras'),'S.Pengelolaan':avg('sPengelolaan'),'S.Pembiayaan':avg('sPembiayaan'),
+    });
+
+    // Recent lists
+    const recent = (arr, fn) => {
+      if (arr.length===0) return '<li class="text-sm text-slate-400 py-4 text-center">Belum ada data.</li>';
+      return arr.slice(-5).reverse().map((it,i) => {
+        const x = fn(it);
+        return `<li class="flex items-start gap-3 py-2 border-b border-slate-50 last:border-0"><span class="w-7 h-7 rounded-full bg-blue-100 text-blue-700 text-xs font-bold flex items-center justify-center flex-shrink-0">${i+1}</span><div class="min-w-0 flex-1"><div class="text-sm font-medium text-slate-800 truncate">${esc(x.p)}</div><div class="text-xs text-slate-500 truncate">${esc(x.s)}</div></div></li>`;
+      }).join('');
+    };
+    document.getElementById('recent-akreditasi').innerHTML = recent(ak, a => ({ p:a.namaSekolah, s:`NPSN ${a.npsn} · Akreditasi ${a.akreditasi} · Berakhir ${a.berakhirTahun}` }));
+    document.getElementById('recent-peserta').innerHTML = recent(pd, p => ({ p:p.namaSekolah, s:`${p.wilKecamatan} · L:${p.lakiLaki} P:${p.perempuan} · ${p.verval}` }));
+  }
+
+  /* ================== AKREDITASI ================== */
+  const AKR_OPTS = ['A','B','C','TT','Belum'];
+  let akSearch = '';
+  function akColor(a) { if (a==='A') return 'text-emerald-600 font-semibold'; if (a==='B') return 'text-blue-600 font-semibold'; if (a==='C') return 'text-amber-600 font-semibold'; return 'text-rose-600 font-semibold'; }
+  function tahunColor(y) { if (y<currentYear) return 'bg-rose-200 text-rose-900'; if (y>=currentYear+3) return 'bg-emerald-200 text-emerald-900'; return 'bg-amber-200 text-amber-900'; }
+  function akFiltered() {
+    const all = DB.ak.all();
+    if (!akSearch.trim()) return all;
+    const q = akSearch.toLowerCase();
+    return all.filter(r => ['npsn','namaSekolah','alamatSekolah','kepalaSekolah','akreditasi','nomorSk'].some(k => (r[k]||'').toString().toLowerCase().includes(q)));
+  }
+  function renderAkreditasi() {
+    const all = DB.ak.all(), rows = akFiltered();
+    document.getElementById('ak-count').textContent = `Menampilkan ${rows.length} dari ${all.length} lembaga`;
+    const tbody = document.getElementById('ak-tbody');
+    if (rows.length===0) {
+      tbody.innerHTML = `<tr><td colspan="10" class="text-center py-10 text-slate-400">${all.length===0?'Belum ada data. Klik "+ Input Data" untuk menambahkan.':'Tidak ada data yang cocok dengan pencarian.'}</td></tr>`;
+    } else {
+      tbody.innerHTML = rows.map((r,i) => `<tr class="border-t border-slate-100 align-top">
+        <td class="px-3 py-3">${i+1}</td>
+        <td class="px-3 py-3">${esc(r.npsn)}</td>
+        <td class="px-3 py-3"><span class="text-blue-600 font-medium">${esc(r.namaSekolah)}</span></td>
+        <td class="px-3 py-3 max-w-xs"><span class="text-amber-700">${esc(r.alamatSekolah)}</span></td>
+        <td class="px-3 py-3">${esc(r.kepalaSekolah)}</td>
+        <td class="px-3 py-3"><span class="${akColor(r.akreditasi)}">${esc(r.akreditasi)}</span></td>
+        <td class="px-3 py-3">${esc(r.tahunAkreditasi)}</td>
+        <td class="px-3 py-3"><span class="inline-block px-3 py-1 rounded font-bold ${tahunColor(Number(r.berakhirTahun))}">${esc(r.berakhirTahun)}</span></td>
+        <td class="px-3 py-3">${esc(r.nomorSk)}</td>
+        <td class="px-3 py-3 no-print">${actionsHtml(r.id,'ak')}</td>
+      </tr>`).join('');
+    }
+    renderToolbar('ak-toolbar', {
+      onAdd: () => akForm(),
+      printTitle: 'Data Akreditasi - DISDIK Sumedang',
+      pdf: { title:'DATA AKREDITASI SKB/PKBM TAHUN 2026', filename:`data-akreditasi-${new Date().toISOString().slice(0,10)}.pdf`,
+        columns: [['No','no'],['NPSN','npsn'],['Nama Sekolah','namaSekolah'],['Alamat Sekolah','alamatSekolah'],['Kepala Sekolah','kepalaSekolah'],['Akreditasi','akreditasi'],['Tahun','tahunAkreditasi'],['Berakhir','berakhirTahun'],['Nomor SK','nomorSk']].map(([h,d])=>({header:h,dataKey:d})),
+        rows: rows.map((r,i) => ({...r, no:i+1}))
+      }
+    });
+    tbody.querySelectorAll('button[data-action]').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = Number(b.dataset.id);
+        if (b.dataset.action==='edit') akForm(id);
+        else { if (confirm(`Hapus data "${rows.find(r=>r.id===id)?.namaSekolah}"?`)) { DB.ak.set(DB.ak.all().filter(r=>r.id!==id)); toast('Data dihapus', 'info'); renderAkreditasi(); } }
+      });
+    });
+  }
+  function akForm(editId) {
+    const editing = editId ? DB.ak.all().find(r=>r.id===editId) : null;
+    const v = editing || { npsn:'', namaSekolah:'', alamatSekolah:'', kepalaSekolah:'', akreditasi:'B', tahunAkreditasi:currentYear, berakhirTahun:currentYear+5, nomorSk:'' };
+    const body = `<form id="mf" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('NPSN', `<input name="npsn" value="${esc(v.npsn)}" class="input" required>`, true)}
+        ${field('Nama Sekolah', `<input name="namaSekolah" value="${esc(v.namaSekolah)}" class="input" required>`, true)}
+      </div>
+      ${field('Alamat Sekolah', `<textarea name="alamatSekolah" class="input min-h-[60px]" required>${esc(v.alamatSekolah)}</textarea>`, true)}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('Kepala Sekolah', `<input name="kepalaSekolah" value="${esc(v.kepalaSekolah)}" class="input" required>`, true)}
+        ${field('Akreditasi', `<select name="akreditasi" class="input" required>${AKR_OPTS.map(o=>`<option value="${o}" ${o===v.akreditasi?'selected':''}>${o}</option>`).join('')}</select>`, true)}
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('Tahun Akreditasi', `<input type="number" name="tahunAkreditasi" min="2000" max="2099" value="${esc(v.tahunAkreditasi)}" class="input" required>`, true)}
+        ${field('Berakhir Tahun', `<input type="number" name="berakhirTahun" min="2000" max="2099" value="${esc(v.berakhirTahun)}" class="input" required>`, true)}
+      </div>
+      ${field('Nomor SK', `<input name="nomorSk" value="${esc(v.nomorSk)}" class="input" placeholder="Contoh: 602/BAN-PDM/SK/2025" required>`, true)}
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="mc" class="px-4 py-2 text-sm rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Batal</button>
+        <button type="submit" class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700">${editing?'Update':'Simpan'}</button>
+      </div>
+    </form>`;
+    openModal(editing?'Edit Data Akreditasi':'Input Data Akreditasi', body, () => {
+      document.getElementById('mc').addEventListener('click', closeModal);
+      document.getElementById('mf').addEventListener('submit', e => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const row = {
+          npsn:fd.get('npsn'), namaSekolah:fd.get('namaSekolah'), alamatSekolah:fd.get('alamatSekolah'),
+          kepalaSekolah:fd.get('kepalaSekolah'), akreditasi:fd.get('akreditasi'),
+          tahunAkreditasi:Number(fd.get('tahunAkreditasi')), berakhirTahun:Number(fd.get('berakhirTahun')),
+          nomorSk:fd.get('nomorSk'),
+        };
+        const all = DB.ak.all();
+        if (editing) { DB.ak.set(all.map(r => r.id===editId ? {...r, ...row} : r)); toast('Data Akreditasi diperbarui', 'success'); }
+        else { DB.ak.set([...all, { id: nextId(all), ...row }]); toast('Data Akreditasi berhasil disimpan', 'success'); }
+        closeModal(); renderAkreditasi();
+      });
+    });
+  }
+
+  /* ================== PESERTA DIDIK ================== */
+  const KECAMATAN = ['Sumedang Utara','Sumedang Selatan','Cimalaka','Tanjungsari','Jatinangor','Cisarua','Paseh','Conggeang','Buahdua','Situraja','Wado','Tomo','Ujungjaya'];
+  const VERVAL = ['Sudah','Belum'];
+  let pdSearch = '';
+  function pdFiltered() {
+    const all = DB.pd.all();
+    if (!pdSearch.trim()) return all;
+    const q = pdSearch.toLowerCase();
+    return all.filter(r => ['npsn','namaSekolah','alamatSekolah','wilKecamatan','zonasiKelDesa','verval'].some(k => (r[k]||'').toString().toLowerCase().includes(q)));
+  }
+  function renderPeserta() {
+    const all = DB.pd.all(), rows = pdFiltered();
+    document.getElementById('pd-count').textContent = `Menampilkan ${rows.length} dari ${all.length} lembaga`;
+    const tbody = document.getElementById('pd-tbody');
+    if (rows.length===0) {
+      tbody.innerHTML = `<tr><td colspan="11" class="text-center py-10 text-slate-400">${all.length===0?'Belum ada data. Klik "+ Input Data" untuk menambahkan.':'Tidak ada data yang cocok dengan pencarian.'}</td></tr>`;
+    } else {
+      tbody.innerHTML = rows.map((r,i) => {
+        const total = Number(r.lakiLaki||0)+Number(r.perempuan||0);
+        const sudah = (r.verval||'').toLowerCase()==='sudah';
+        return `<tr class="border-t border-slate-100 align-top">
+          <td class="px-3 py-3">${i+1}</td>
+          <td class="px-3 py-3"><span class="text-blue-600 font-medium">${esc(r.npsn)}</span></td>
+          <td class="px-3 py-3">${esc(r.namaSekolah)}</td>
+          <td class="px-3 py-3 max-w-xs">${esc(r.alamatSekolah)}</td>
+          <td class="px-3 py-3"><span class="bg-amber-200 text-amber-900 px-2 py-1 rounded font-semibold">${esc(r.wilKecamatan)}</span></td>
+          <td class="px-3 py-3"><span class="bg-amber-100 text-rose-700 px-2 py-1 rounded font-semibold">${esc(r.zonasiKelDesa)}</span></td>
+          <td class="px-3 py-3">${esc(r.lakiLaki)}</td>
+          <td class="px-3 py-3">${esc(r.perempuan)}</td>
+          <td class="px-3 py-3"><span class="bg-amber-200 text-amber-900 px-3 py-1 rounded font-bold">${total}</span></td>
+          <td class="px-3 py-3"><span class="px-3 py-1 rounded font-semibold text-xs ${sudah?'bg-emerald-200 text-emerald-900':'bg-rose-200 text-rose-800'}">${esc(r.verval)}</span></td>
+          <td class="px-3 py-3 no-print">${actionsHtml(r.id,'pd')}</td>
+        </tr>`;
+      }).join('');
+    }
+    renderToolbar('pd-toolbar', {
+      onAdd: () => pdForm(),
+      printTitle: 'Data Peserta Didik SPMB ATS-APS - DISDIK Sumedang',
+      pdf: { title:'DATA PESERTA DIDIK SPMB ATS/APS PENDIDIKAN NON FORMAL 2026', filename:`data-peserta-didik-${new Date().toISOString().slice(0,10)}.pdf`,
+        columns: [['No','no'],['NPSN','npsn'],['Nama Sekolah','namaSekolah'],['Alamat','alamatSekolah'],['Kecamatan','wilKecamatan'],['Zonasi','zonasiKelDesa'],['L','lakiLaki'],['P','perempuan'],['Jumlah','jumlah'],['Verval','verval']].map(([h,d])=>({header:h,dataKey:d})),
+        rows: rows.map((r,i) => ({...r, no:i+1, jumlah:Number(r.lakiLaki||0)+Number(r.perempuan||0)}))
+      }
+    });
+    tbody.querySelectorAll('button[data-action]').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = Number(b.dataset.id);
+        if (b.dataset.action==='edit') pdForm(id);
+        else { if (confirm(`Hapus data peserta didik "${rows.find(r=>r.id===id)?.namaSekolah}"?`)) { DB.pd.set(DB.pd.all().filter(r=>r.id!==id)); toast('Data dihapus', 'info'); renderPeserta(); } }
+      });
+    });
+  }
+  function pdForm(editId) {
+    const editing = editId ? DB.pd.all().find(r=>r.id===editId) : null;
+    const v = editing || { npsn:'', namaSekolah:'', alamatSekolah:'', wilKecamatan:'Sumedang Utara', zonasiKelDesa:'', lakiLaki:0, perempuan:0, verval:'Belum' };
+    const body = `<form id="mf" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('NPSN', `<input name="npsn" value="${esc(v.npsn)}" class="input" required>`, true)}
+        ${field('Nama Sekolah', `<input name="namaSekolah" value="${esc(v.namaSekolah)}" class="input" required>`, true)}
+      </div>
+      ${field('Alamat Sekolah', `<textarea name="alamatSekolah" class="input min-h-[60px]" required>${esc(v.alamatSekolah)}</textarea>`, true)}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('Wilayah Kecamatan', `<select name="wilKecamatan" class="input" required>${KECAMATAN.map(o=>`<option value="${o}" ${o===v.wilKecamatan?'selected':''}>${o}</option>`).join('')}</select>`, true)}
+        ${field('Zonasi Kelurahan/Desa', `<input name="zonasiKelDesa" value="${esc(v.zonasiKelDesa)}" class="input" placeholder="Contoh: Mulyasari Sirnamulya" required>`, true)}
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        ${field('Laki-Laki', `<input type="number" name="lakiLaki" min="0" value="${esc(v.lakiLaki)}" class="input">`)}
+        ${field('Perempuan', `<input type="number" name="perempuan" min="0" value="${esc(v.perempuan)}" class="input">`)}
+        ${field('Verval', `<select name="verval" class="input" required>${VERVAL.map(o=>`<option value="${o}" ${o===v.verval?'selected':''}>${o}</option>`).join('')}</select>`, true)}
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="mc" class="px-4 py-2 text-sm rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Batal</button>
+        <button type="submit" class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700">${editing?'Update':'Simpan'}</button>
+      </div>
+    </form>`;
+    openModal(editing?'Edit Data Peserta Didik':'Input Data Peserta Didik', body, () => {
+      document.getElementById('mc').addEventListener('click', closeModal);
+      document.getElementById('mf').addEventListener('submit', e => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const row = {
+          npsn:fd.get('npsn'), namaSekolah:fd.get('namaSekolah'), alamatSekolah:fd.get('alamatSekolah'),
+          wilKecamatan:fd.get('wilKecamatan'), zonasiKelDesa:fd.get('zonasiKelDesa'),
+          lakiLaki:Number(fd.get('lakiLaki')||0), perempuan:Number(fd.get('perempuan')||0),
+          verval:fd.get('verval'),
+        };
+        const all = DB.pd.all();
+        if (editing) { DB.pd.set(all.map(r => r.id===editId ? {...r, ...row} : r)); toast('Data Peserta Didik diperbarui', 'success'); }
+        else { DB.pd.set([...all, { id: nextId(all), ...row }]); toast('Data Peserta Didik berhasil disimpan', 'success'); }
+        closeModal(); renderPeserta();
+      });
+    });
+  }
+
+  /* ================== E-RAPOR ================== */
+  const KETERISIAN = ['LENGKAP','BELUM LENGKAP'];
+  const SNP = [
+    ['skl','SKL'],['sIsi','S.Isi'],['sProses','S.Proses'],['sPenilaian','S.Penilaian'],
+    ['sPtk','S.PTK'],['sSapras','S.Sapras'],['sPengelolaan','S.Pengelolaan'],['sPembiayaan','S.Pembiayaan'],
+  ];
+  let erSearch = '';
+  function erCat(v) {
+    if (v>=80) return { l:'Baik', c:'bg-emerald-200 text-emerald-900' };
+    if (v>=60) return { l:'Cukup', c:'bg-amber-100 text-amber-800' };
+    if (v>=40) return { l:'Sedang', c:'bg-amber-200 text-amber-900' };
+    return { l:'Kurang', c:'bg-rose-200 text-rose-900' };
+  }
+  function erFiltered() {
+    const all = DB.er.all();
+    if (!erSearch.trim()) return all;
+    const q = erSearch.toLowerCase();
+    return all.filter(r => ['npsn','namaLembaga','keterisian'].some(k => (r[k]||'').toString().toLowerCase().includes(q)));
+  }
+  function renderERapor() {
+    const all = DB.er.all(), rows = erFiltered();
+    document.getElementById('er-count').textContent = `Menampilkan ${rows.length} dari ${all.length} lembaga`;
+    const tbody = document.getElementById('er-tbody');
+    if (rows.length===0) {
+      tbody.innerHTML = `<tr><td colspan="13" class="text-center py-10 text-slate-400">${all.length===0?'Belum ada data. Klik "+ Input Data" untuk menambahkan.':'Tidak ada data yang cocok dengan pencarian.'}</td></tr>`;
+    } else {
+      tbody.innerHTML = rows.map((r,i) => {
+        const cells = SNP.map(([k]) => { const v = Number(r[k]||0); const c = erCat(v); return `<td class="px-3 py-3"><span class="px-2 py-1 rounded font-semibold ${c.c}">${v}% (${c.l})</span></td>`; }).join('');
+        return `<tr class="border-t border-slate-100 align-top">
+          <td class="px-3 py-3">${i+1}</td>
+          <td class="px-3 py-3">${esc(r.npsn)}</td>
+          <td class="px-3 py-3"><span class="text-blue-600 font-medium">${esc(r.namaLembaga)}</span></td>
+          ${cells}
+          <td class="px-3 py-3"><span class="px-3 py-1 rounded font-bold text-xs ${r.keterisian==='LENGKAP'?'bg-emerald-200 text-emerald-900':'bg-rose-200 text-rose-900'}">${esc(r.keterisian)}</span></td>
+          <td class="px-3 py-3 no-print">${actionsHtml(r.id,'er')}</td>
+        </tr>`;
+      }).join('');
+    }
+    renderToolbar('er-toolbar', {
+      onAdd: () => erForm(),
+      printTitle: 'Data E-Rapor 8 SNP - DISDIK Sumedang',
+      pdf: { title:'DATA E-RAPOR 8 SNP SKB/PKBM TAHUN 2026', filename:`data-e-rapor-${new Date().toISOString().slice(0,10)}.pdf`,
+        columns: [['No','no'],['NPSN','npsn'],['Nama Lembaga','namaLembaga'],...SNP.map(([k,l])=>[l,k+'P']),['Keterisian','keterisian']].map(([h,d])=>({header:h,dataKey:d})),
+        rows: rows.map((r,i) => ({ ...r, no:i+1,
+          sklP:r.skl+'%', sIsiP:r.sIsi+'%', sProsesP:r.sProses+'%', sPenilaianP:r.sPenilaian+'%',
+          sPtkP:r.sPtk+'%', sSaprasP:r.sSapras+'%', sPengelolaanP:r.sPengelolaan+'%', sPembiayaanP:r.sPembiayaan+'%',
+        }))
+      }
+    });
+    tbody.querySelectorAll('button[data-action]').forEach(b => {
+      b.addEventListener('click', () => {
+        const id = Number(b.dataset.id);
+        if (b.dataset.action==='edit') erForm(id);
+        else { if (confirm(`Hapus data E-Rapor "${rows.find(r=>r.id===id)?.namaLembaga}"?`)) { DB.er.set(DB.er.all().filter(r=>r.id!==id)); toast('Data dihapus', 'info'); renderERapor(); } }
+      });
+    });
+  }
+  function erForm(editId) {
+    const editing = editId ? DB.er.all().find(r=>r.id===editId) : null;
+    const v = editing || { npsn:'', namaLembaga:'', skl:0, sIsi:0, sProses:0, sPenilaian:0, sPtk:0, sSapras:0, sPengelolaan:0, sPembiayaan:0, keterisian:'BELUM LENGKAP' };
+    const snpFields = SNP.map(([k,l]) => field(l, `<input type="number" name="${k}" min="0" max="100" value="${esc(v[k])}" class="input">`)).join('');
+    const body = `<form id="mf" class="space-y-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        ${field('NPSN', `<input name="npsn" value="${esc(v.npsn)}" class="input" required>`, true)}
+        ${field('Nama Lembaga', `<input name="namaLembaga" value="${esc(v.namaLembaga)}" class="input" required>`, true)}
+      </div>
+      <div class="border border-slate-200 rounded p-4">
+        <div class="text-sm font-semibold text-slate-700 mb-3">Standar Nasional Pendidikan (0–100%)</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">${snpFields}</div>
+      </div>
+      ${field('Keterisian 8 SNP', `<select name="keterisian" class="input" required>${KETERISIAN.map(o=>`<option value="${o}" ${o===v.keterisian?'selected':''}>${o}</option>`).join('')}</select>`, true)}
+      <div class="flex justify-end gap-2 pt-2">
+        <button type="button" id="mc" class="px-4 py-2 text-sm rounded border border-slate-300 text-slate-700 hover:bg-slate-50">Batal</button>
+        <button type="submit" class="px-4 py-2 text-sm rounded bg-blue-600 text-white hover:bg-blue-700">${editing?'Update':'Simpan'}</button>
+      </div>
+    </form>`;
+    openModal(editing?'Edit Data E-Rapor 8 SNP':'Input Data E-Rapor 8 SNP', body, () => {
+      document.getElementById('mc').addEventListener('click', closeModal);
+      document.getElementById('mf').addEventListener('submit', e => {
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        const clamp = x => Math.max(0, Math.min(100, Math.round(Number(x)||0)));
+        const row = { npsn:fd.get('npsn'), namaLembaga:fd.get('namaLembaga'), keterisian:fd.get('keterisian') };
+        SNP.forEach(([k]) => { row[k] = clamp(fd.get(k)); });
+        const all = DB.er.all();
+        if (editing) { DB.er.set(all.map(r => r.id===editId ? {...r, ...row} : r)); toast('Data E-Rapor diperbarui', 'success'); }
+        else { DB.er.set([...all, { id: nextId(all), ...row }]); toast('Data E-Rapor berhasil disimpan', 'success'); }
+        closeModal(); renderERapor();
+      });
+    });
+  }
+
+  /* ================== INIT ================== */
+  // Search inputs
+  document.getElementById('ak-search').addEventListener('input', e => { akSearch = e.target.value; renderAkreditasi(); });
+  document.getElementById('pd-search').addEventListener('input', e => { pdSearch = e.target.value; renderPeserta(); });
+  document.getElementById('er-search').addEventListener('input', e => { erSearch = e.target.value; renderERapor(); });
+  // Dropdown
+  document.getElementById('dropdown-btn').addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('dropdown-menu').classList.toggle('hidden');
+  });
+  document.addEventListener('click', e => {
+    if (!document.getElementById('dropdown-wrap').contains(e.target)) {
+      document.getElementById('dropdown-menu').classList.add('hidden');
+    }
+  });
+  document.getElementById('mobile-toggle').addEventListener('click', () => {
+    document.getElementById('mobile-menu').classList.toggle('hidden');
+  });
+  // Backup / Restore / Reset
+  document.getElementById('btn-backup').addEventListener('click', () => DB.export());
+  document.getElementById('file-restore').addEventListener('change', e => {
+    const f = e.target.files?.[0];
+    if (f) DB.import(f);
+    e.target.value = '';
+  });
+  document.getElementById('btn-reset').addEventListener('click', () => {
+    if (confirm('Yakin ingin menghapus semua data lokal?')) {
+      DB.reset();
+      toast('Data telah direset. Memuat ulang...', 'info');
+      setTimeout(() => { location.hash = '#beranda'; location.reload(); }, 800);
+    }
+  });
+
+  // Storage info (shown on Keterangan page)
+  function refreshStorageInfo() {
+    const el = document.getElementById('storage-info');
+    if (!el) return;
+    const sizeOf = key => {
+      try { return new Blob([localStorage.getItem(key) || '']).size; } catch { return 0; }
+    };
+    const fmt = b => b < 1024 ? b + ' B' : (b/1024).toFixed(1) + ' KB';
+    const ak = DB.ak.all(), pd = DB.pd.all(), er = DB.er.all();
+    el.innerHTML = `
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div><div class="text-slate-500">Akreditasi</div><div class="text-base font-bold text-blue-700">${ak.length} baris</div><div class="text-[10px] text-slate-400">${fmt(sizeOf(STORAGE.ak))}</div></div>
+        <div><div class="text-slate-500">Peserta Didik</div><div class="text-base font-bold text-emerald-700">${pd.length} baris</div><div class="text-[10px] text-slate-400">${fmt(sizeOf(STORAGE.pd))}</div></div>
+        <div><div class="text-slate-500">E-Rapor</div><div class="text-base font-bold text-rose-700">${er.length} baris</div><div class="text-[10px] text-slate-400">${fmt(sizeOf(STORAGE.er))}</div></div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-slate-200 text-slate-500 text-[11px]">
+        Total: <strong>${ak.length + pd.length + er.length}</strong> baris · ${fmt(sizeOf(STORAGE.ak)+sizeOf(STORAGE.pd)+sizeOf(STORAGE.er))} terpakai · Storage key: <code class="text-blue-600">sumedang.*.v1</code>
+      </div>
+    `;
+  }
+
+  // Sync antar-tab: jika tab lain mengubah data, refresh tampilan
+  window.addEventListener('storage', e => {
+    if (e.key && Object.values(STORAGE).includes(e.key)) {
+      const route = (location.hash || '#beranda').slice(1);
+      showPage(route);
+      toast('Data diperbarui dari tab lain', 'info');
+    }
+  });
+
+  // Refresh storage info when entering Keterangan
+  const _origShowPage = showPage;
+  showPage = function(route) {
+    _origShowPage(route);
+    if  (route === 'keterangan') refreshStorageInfo();
+  };
+  // Initial route
+  const initial = (location.hash || '#beranda').slice(1);
+  showPage(initial);
+  </script>
+</body>
+</html>
