@@ -3,20 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Disdik Sumedang - Mutu Non Formal 2026 (Logika Warna Diperbarui)</title>
+    <title>Disdik Sumedang - Mutu Non Formal 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+
+        /* CSS Print Optimization */
+        @media print {
+            body { background: white; color: black; }
+            nav, button, .no-print { display: none !important; }
+            main { padding: 0 !important; margin: 0 !important; }
+            .shadow-sm, .rounded-xl { border: none !important; box-shadow: none !important; }
+            table { font-size: 10px !important; width: 100% !important; border-collapse: collapse !important; }
+            th, td { border: 1px solid #ddd !important; padding: 6px !important; }
+            section { display: block !important; }
+            .hidden { display: none !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
     <nav class="bg-[#0b1e33] text-white px-6 py-3 flex justify-between items-center shadow-md">
         <div class="flex items-center space-x-3">
-            <div class="w-8 h-8 bg-amber-500 rounded flex items-center justify-center font-bold text-xs text-slate-900">DISDIK</div>
+            <div class="w-50 h-50-center justify-center-logo"><img src="logo.png" alt="Logo Kabupaten Sumedang"></div>
             <span class="font-semibold text-sm tracking-wide">DISDIK SUMEDANG <br><span class="text-xs text-gray-400">Sistem Penjaminan Mutu 2026</span></span>
         </div>
         <div class="flex space-x-1">
@@ -28,17 +42,26 @@
         </div>
     </nav>
 
-    <header class="bg-white mx-6 mt-6 p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center text-center">
-        <div class="w-36 h-36-center justify-center-logo"><img src="logo.png" alt="Logo Kabupaten Sumedang"></div>
+    <header id="main-header" class="bg-white mx-6 mt-6 p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center text-center">
+        <div class="w-16 h-16 bg-gray-200 rounded-full mb-3 flex items-center justify-center text-gray-500 font-bold text-xs">[ LOGO ]</div>
         <h1 class="text-xl font-bold text-[#1e3a8a] tracking-wide">DINAS PENDIDIKAN KABUPATEN SUMEDANG</h1>
         <h2 class="text-sm font-semibold text-gray-700 mt-1 uppercase">Standar Pengelolaan Satuan Pendidikan Non Formal <br> Penyelenggaraan Pendidikan Kesetaraan SKB/PKBM Tahun 2026</h2>
         <p class="text-xs italic text-gray-500 mt-2">"MANAJEMEN BERBASIS SEKOLAH (MBS) DAN PENGELOLAAN SISTEM INFORMASI (DIGITALISASI)"</p>
     </header>
 
-    <main class="flex-1 p-6">
+    <main id="print-area-dashboard" class="flex-1 p-6">
 
         <section id="tab-beranda" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            
+            <div class="flex justify-between items-center no-print">
+                <h3 class="text-lg font-bold text-gray-800">Ringkasan Statistik Penjaminan Mutu</h3>
+                <div class="flex space-x-2">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-print mr-1"></i> Cetak Halaman</button>
+                    <button onclick="downloadDashboardPDF()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> Unduh PDF Beranda</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 no-print">
                 <div onclick="switchTab('akreditasi')" class="bg-blue-600 text-white p-4 rounded-xl shadow-sm flex items-center justify-between cursor-pointer hover:bg-blue-700 transition">
                     <div>
                         <h3 class="font-semibold text-base">Data Akreditasi</h3>
@@ -118,14 +141,19 @@
 
         <section id="tab-akreditasi" class="hidden space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-800">Data Akreditasi Lembaga (35 Record)</h3>
-                <button onclick="openAddModal('modal-akreditasi', 'form-akreditasi')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                <h3 class="text-lg font-bold text-gray-800">Data Akreditasi Lembaga</h3>
+                <div class="flex space-x-2">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-print mr-1"></i> Cetak</button>
+                    <button onclick="downloadPDF('print-akreditasi', 'Data_Akreditasi_Lembaga')" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> Unduh PDF</button>
+                    <button onclick="openAddModal('modal-akreditasi', 'form-akreditasi')" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <div id="print-akreditasi" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto p-2">
+                <h2 class="text-center font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide hidden print:block">Laporan Penjaminan Mutu: Data Akreditasi Lembaga 2026</h2>
                 <table class="w-full text-left border-collapse text-xs min-w-[1000px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold uppercase">
-                            <th class="p-3">No</th>
+                            <th class="p-3 text-center">No</th>
                             <th class="p-3">NPSN</th>
                             <th class="p-3">Nama Sekolah</th>
                             <th class="p-3">Alamat</th>
@@ -134,11 +162,10 @@
                             <th class="p-3 text-center">Tahun Akre</th>
                             <th class="p-3 text-center">Tahun Berakhir</th>
                             <th class="p-3">Nomor SK</th>
-                            <th class="p-3 text-center">Aksi</th>
+                            <th class="p-3 text-center no-print">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="table-akreditasi-body" class="text-gray-700 divide-y divide-gray-100">
-                        </tbody>
+                    <tbody id="table-akreditasi-body" class="text-gray-700 divide-y divide-gray-100"></tbody>
                 </table>
             </div>
         </section>
@@ -146,25 +173,29 @@
 
         <section id="tab-ijin-operasional" class="hidden space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-800">Data Ijin Operasional Lembaga (35 Record)</h3>
-                <button onclick="openAddModal('modal-ijin', 'form-ijin')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                <h3 class="text-lg font-bold text-gray-800">Data Ijin Operasional Lembaga</h3>
+                <div class="flex space-x-2">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-print mr-1"></i> Cetak</button>
+                    <button onclick="downloadPDF('print-ijin', 'Data_Ijin_Operasional')" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> Unduh PDF</button>
+                    <button onclick="openAddModal('modal-ijin', 'form-ijin')" class="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <div id="print-ijin" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto p-2">
+                <h2 class="text-center font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide hidden print:block">Laporan Penjaminan Mutu: Data Ijin Operasional Lembaga 2026</h2>
                 <table class="w-full text-left border-collapse text-xs min-w-[1000px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold uppercase">
-                            <th class="p-3">No</th>
+                            <th class="p-3 text-center">No</th>
                             <th class="p-3">NPSN</th>
                             <th class="p-3">Nama Lembaga</th>
                             <th class="p-3">Alamat</th>
                             <th class="p-3">Kepala Sekolah</th>
                             <th class="p-3 text-center">Tahun Pembuatan</th>
                             <th class="p-3 text-center">Tahun Berakhir</th>
-                            <th class="p-3 text-center">Aksi</th>
+                            <th class="p-3 text-center no-print">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="table-ijin-body" class="text-gray-700 divide-y divide-gray-100">
-                        </tbody>
+                    <tbody id="table-ijin-body" class="text-gray-700 divide-y divide-gray-100"></tbody>
                 </table>
             </div>
         </section>
@@ -172,14 +203,19 @@
 
         <section id="tab-peserta-didik" class="hidden space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-800">Data Peserta Didik SPMB ATS/APS (35 Record)</h3>
-                <button onclick="openAddModal('modal-pd', 'form-pd')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                <h3 class="text-lg font-bold text-gray-800">Data Peserta Didik SPMB ATS/APS</h3>
+                <div class="flex space-x-2">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-print mr-1"></i> Cetak</button>
+                    <button onclick="downloadPDF('print-pd', 'Data_Peserta_Didik')" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> Unduh PDF</button>
+                    <button onclick="openAddModal('modal-pd', 'form-pd')" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <div id="print-pd" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto p-2">
+                <h2 class="text-center font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide hidden print:block">Laporan Rekapitulasi: Data Peserta Didik Kesetaraan 2026</h2>
                 <table class="w-full text-left border-collapse text-xs">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold uppercase">
-                            <th class="p-3">No</th>
+                            <th class="p-3 text-center">No</th>
                             <th class="p-3">NPSN</th>
                             <th class="p-3">Nama Sekolah</th>
                             <th class="p-3">Kecamatan</th>
@@ -188,11 +224,10 @@
                             <th class="p-3 text-center">Perempuan</th>
                             <th class="p-3 text-center">Jumlah</th>
                             <th class="p-3 text-center">Verval</th>
-                            <th class="p-3 text-center">Aksi</th>
+                            <th class="p-3 text-center no-print">Aksi</th>
                         </tr>
                     </thead>
-                    <tbody id="table-pd-body" class="text-gray-700 divide-y divide-gray-100">
-                        </tbody>
+                    <tbody id="table-pd-body" class="text-gray-700 divide-y divide-gray-100"></tbody>
                 </table>
             </div>
         </section>
@@ -200,19 +235,24 @@
 
         <section id="tab-e-rapor" class="hidden space-y-4">
             <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-gray-800">Data E-Rapor & 8 Standar Nasional Pendidikan (35 Record)</h3>
-                <button onclick="openAddModal('modal-erapor', 'form-erapor')" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                <h3 class="text-lg font-bold text-gray-800">Data E-Rapor & 8 Standar Nasional Pendidikan</h3>
+                <div class="flex space-x-2">
+                    <button onclick="window.print()" class="bg-gray-700 hover:bg-gray-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-print mr-1"></i> Cetak</button>
+                    <button onclick="downloadPDF('print-erapor', 'Data_Capaian_ERapor_SNP')" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-2 rounded text-xs font-medium"><i class="fa-solid fa-file-pdf mr-1"></i> Unduh PDF</button>
+                    <button onclick="openAddModal('modal-erapor', 'form-erapor')" class="bg-rose-600 hover:bg-rose-700 text-white px-4 py-2 rounded text-xs font-medium"><i class="fa-solid fa-plus mr-1"></i> Input Data Baru</button>
+                </div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto">
+            <div id="print-erapor" class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-x-auto p-2">
+                <h2 class="text-center font-bold text-sm text-gray-800 mb-3 uppercase tracking-wide hidden print:block">Laporan Capaian Evaluasi: E-Rapor Dan 8 SNP Lembaga 2026</h2>
                 <table class="w-full text-left border-collapse text-xs min-w-[1200px]">
                     <thead>
                         <tr class="bg-gray-50 border-b border-gray-200 text-gray-600 font-semibold uppercase">
-                            <th class="p-3" rowspan="2">No</th>
+                            <th class="p-3 text-center" rowspan="2">No</th>
                             <th class="p-3" rowspan="2">NPSN</th>
                             <th class="p-3" rowspan="2">Nama Lembaga</th>
                             <th class="p-3 text-center border-b" colspan="8">Standar Nasional Pendidikan (%)</th>
                             <th class="p-3 text-center" rowspan="2">Keterisian</th>
-                            <th class="p-3 text-center" rowspan="2">Aksi</th>
+                            <th class="p-3 text-center no-print" rowspan="2">Aksi</th>
                         </tr>
                         <tr class="bg-gray-100 text-gray-600 font-medium text-[10px]">
                             <th class="p-2 border-r">SKL</th>
@@ -225,8 +265,7 @@
                             <th class="p-2">S.Pembiayaan</th>
                         </tr>
                     </thead>
-                    <tbody id="table-erapor-body" class="text-gray-700 divide-y divide-gray-100">
-                        </tbody>
+                    <tbody id="table-erapor-body" class="text-gray-700 divide-y divide-gray-100"></tbody>
                 </table>
             </div>
         </section>
@@ -377,14 +416,13 @@
             { npsn: 'P9911125', nama: 'PKBM BINA SEJAHTERA', alamat: 'Jl. Rancakalong No.55, Pamulihan', kepsek: 'YUSUF SUPRIADI', grade: 'Belum', tahun: 0, akhir: 2024, sk: 'Belum Terakreditasi' },
             { npsn: 'P9911126', nama: 'PKBM AL-FALAH', alamat: 'Kp. Cikaramas, Sukasari', kepsek: 'H. JALALUDIN', grade: 'B', tahun: 2024, akhir: 2029, sk: 'No SK: 133/BAN-PDM/2024' },
             { npsn: 'P9911127', nama: 'PKBM BINA PUTRA', alamat: 'Jl. Tolengas Km.12, Tomo', kepsek: 'ENDANG ARIPIN', grade: 'C', tahun: 2023, akhir: 2028, sk: 'No SK: 367/BAN-PDM/2023' },
-            { npsn: 'P9911128', nama: 'PKBM KARYA ABADI', alamat: 'Dsn. Keboncau, Ujungjaya', kepsek: 'TENTEN ROSTINI', grade: 'B', text: 2025, akhir: 2030, sk: 'No SK: 699/BAN-PDM/2025' },
+            { npsn: 'P9911128', nama: 'PKBM KARYA ABADI', alamat: 'Dsn. Keboncau, Ujungjaya', kepsek: 'TENTEN ROSTINI', grade: 'B', tahun: 2025, akhir: 2030, sk: 'No SK: 699/BAN-PDM/2025' },
             { npsn: 'P9911129', nama: 'PKBM INSAN MADANI', alamat: 'Jl. Sukajadi No.41, Wado', kepsek: 'DEDE SURYANA', grade: 'A', tahun: 2025, akhir: 2030, sk: 'No SK: 604/BAN-PDM/2025' },
             { npsn: 'P9911130', nama: 'PKBM TUNAS MUDA', alamat: 'Cibeusi No.110, Jatinangor', kepsek: 'ANITA RAHMAWATI', grade: 'B', tahun: 2022, akhir: 2027, sk: 'No SK: 231/BAN-PDM/2022' }
         ];
 
-        // --- GENERATE DATA IJIN OPERASIONAL (SINKRON DENGAN AKREDITASI) ---
         let dataIjin = dataAkreditasi.map((item, idx) => {
-            let logikTahunAkhir = 2025 + (idx % 5); // Distribusi variasi tahun 2025, 2026, 2027, 2028, 2029
+            let logikTahunAkhir = 2025 + (idx % 5);
             return {
                 npsn: item.npsn,
                 nama: item.nama,
@@ -396,9 +434,9 @@
         });
 
         let dataPD = [
-            { npsn: 'P2963449', nama: 'PKBM MEKAR BUANA', kec: 'Sumedang Utara', desa: 'Kotakaler, Kebon Jati', l: 25, p: 20, verval: 'Sudah' },
+            { npsn: 'P2963449', nama: 'PKBM MEKAR BUANA', kec: 'Sumedang Utara', desa: 'Kotakaler', l: 25, p: 20, verval: 'Sudah' },
             { npsn: 'P9934726', nama: 'PKBM PASCA MARGA', kec: 'Sumedang Utara', desa: 'Rancamulya', l: 15, p: 30, verval: 'Belum' },
-            { npsn: 'P9952581', nama: 'PKBM MULYASARI SEJATI', kec: 'Sumedang Utara', desa: 'Mulyasari, Sirna Mulya', l: 42, p: 38, verval: 'Sudah' },
+            { npsn: 'P9952581', nama: 'PKBM MULYASARI SEJATI', kec: 'Sumedang Utara', desa: 'Mulyasari', l: 42, p: 38, verval: 'Sudah' },
             { npsn: 'P9999789', nama: 'PKBM AL-AMANAH', kec: 'Sumedang Utara', desa: 'Situ', l: 18, p: 12, verval: 'Belum' },
             { npsn: 'P9984783', nama: 'PKBM MENTARI MADANI', kec: 'Sumedang Utara', desa: 'Jatihurip', l: 30, p: 25, verval: 'Sudah' },
             { npsn: 'P9911101', nama: 'PKBM SEJAHTERA UTARA', kec: 'Sumedang Utara', desa: 'Regol', l: 50, p: 55, verval: 'Sudah' },
@@ -501,20 +539,15 @@
         function handleGradeChange() {
             if (document.getElementById('akr-grade').value === 'Belum') {
                 document.getElementById('akr-tahun').value = 0;
-                document.getElementById('akr-akhir').value = 2025; // Default merah karena di bawah 2026
+                document.getElementById('akr-akhir').value = 2025;
                 document.getElementById('akr-sk').value = 'Belum Terakreditasi';
             }
         }
 
-        // --- CRITICAL LOGIC: UNIVERSAL YEAR COLOR CONDITION ---
         function getYearColorBadgeClass(year) {
-            if (year <= 2026) {
-                return 'bg-rose-100 text-rose-700 font-bold border border-rose-300'; // Kurang dari atau sama dengan 2026 -> Merah
-            } else if (year === 2027) {
-                return 'bg-amber-100 text-amber-700 font-bold border border-amber-300'; // Sama dengan 2027 -> Kuning
-            } else if (year >= 2028) {
-                return 'bg-emerald-100 text-emerald-700 font-bold border border-emerald-300'; // Lebih dari atau sama dengan 2028 -> Hijau
-            }
+            if (year <= 2026) return 'bg-rose-100 text-rose-700 font-bold border border-rose-300';
+            else if (year === 2027) return 'bg-amber-100 text-amber-700 font-bold border border-amber-300';
+            else if (year >= 2028) return 'bg-emerald-100 text-emerald-700 font-bold border border-emerald-300';
             return 'bg-gray-100 text-gray-700 border border-gray-300';
         }
 
@@ -525,9 +558,61 @@
             return 'bg-rose-100 text-rose-800 border border-rose-300';
         }
 
+        // --- EXPORT PDF FUNCTIONS ---
+        function downloadPDF(elementId, filename) {
+            const element = document.getElementById(elementId);
+            const opt = {
+                margin:       [0.4, 0.4, 0.4, 0.4],
+                filename:     filename + '_2026.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            const actionButtons = element.querySelectorAll('.no-print');
+            actionButtons.forEach(btn => btn.style.display = 'none');
+            
+            const printTitle = element.querySelector('.print\\:block');
+            if(printTitle) printTitle.style.display = 'block';
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                actionButtons.forEach(btn => btn.style.display = '');
+                if(printTitle) printTitle.style.display = '';
+            });
+        }
+
+        // Fungsi khusus unduh PDF Beranda (Menggabungkan Header Banner + Rangkuman Statistik)
+        function downloadDashboardPDF() {
+            // Membuat kontainer sementara untuk menampung elemen yang akan di-PDF-kan
+            const element = document.createElement('div');
+            element.style.padding = '20px';
+            element.style.background = '#f9fafb';
+
+            // Clone Header & Area Utama Beranda
+            const headerClone = document.getElementById('main-header').cloneNode(true);
+            const contentClone = document.getElementById('print-area-dashboard').cloneNode(true);
+
+            element.appendChild(headerClone);
+            element.appendChild(contentClone);
+
+            // Sembunyikan elemen berkategori no-print dari berkas PDF hasil render
+            const noPrintElements = element.querySelectorAll('.no-print');
+            noPrintElements.forEach(el => el.remove());
+
+            const opt = {
+                margin:       [0.3, 0.3, 0.3, 0.3],
+                filename:     'Ringkasan_Dashboard_Mutu_2026.pdf',
+                image:        { type: 'jpeg', quality: 0.95 },
+                html2canvas:  { scale: 1.5, useCORS: true },
+                jsPDF:        { unit: 'in', format: 'a4', orientation: 'landscape' }
+            };
+
+            html2pdf().set(opt).from(element).save();
+        }
+
         // --- DATA RENDERING IN TABLES ---
         function renderTables() {
-            // 1. Table Akreditasi dengan Logika Warna Baru
+            // 1. Table Akreditasi
             const akrBody = document.getElementById('table-akreditasi-body');
             akrBody.innerHTML = dataAkreditasi.map((d, index) => {
                 let gradeBadge = 'bg-blue-100 text-blue-700';
@@ -549,7 +634,7 @@
                             <span class="px-3 py-1 rounded-md ${getYearColorBadgeClass(d.akhir)}">${d.akhir}</span>
                         </td>
                         <td class="p-3 border-b text-gray-400 font-mono text-[11px]">${d.sk}</td>
-                        <td class="p-3 border-b text-center whitespace-nowrap">
+                        <td class="p-3 border-b text-center whitespace-nowrap no-print">
                             <button onclick="editAkreditasi(${index})" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
                             <button onclick="deleteRow('akr', ${index})" class="text-rose-600 hover:text-rose-900 bg-rose-50 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
                         </td>
@@ -557,7 +642,7 @@
                 `;
             }).join('');
 
-            // 2. Table Ijin Operasional dengan Logika Warna Baru
+            // 2. Table Ijin Operasional
             const ijinBody = document.getElementById('table-ijin-body');
             ijinBody.innerHTML = dataIjin.map((d, index) => `
                 <tr class="hover:bg-gray-50 transition">
@@ -570,14 +655,14 @@
                     <td class="p-3 border-b text-center">
                         <span class="px-3 py-1 rounded-md ${getYearColorBadgeClass(d.berakhir)}">${d.berakhir}</span>
                     </td>
-                    <td class="p-3 border-b text-center whitespace-nowrap">
+                    <td class="p-3 border-b text-center whitespace-nowrap no-print">
                         <button onclick="editIjin(${index})" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button onclick="deleteRow('ijin', ${index})" class="text-rose-600 hover:text-rose-900 bg-rose-50 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </tr>
             `).join('');
 
-            // 3. Table Peserta Didik
+            // 3. Table Peserta Didik (Zonasi Desa Berwarna Merah)
             const pdBody = document.getElementById('table-pd-body');
             pdBody.innerHTML = dataPD.map((d, index) => `
                 <tr class="hover:bg-gray-50 transition">
@@ -585,14 +670,14 @@
                     <td class="p-3 border-b text-blue-600 font-medium">${d.npsn}</td>
                     <td class="p-3 border-b font-semibold">${d.nama}</td>
                     <td class="p-3 border-b">${d.kec}</td>
-                    <td class="p-3 border-b text-gray-500">${d.desa}</td>
+                    <td class="p-3 border-b text-rose-600 font-semibold">${d.desa}</td>
                     <td class="p-3 border-b text-center font-medium">${d.l}</td>
                     <td class="p-3 border-b text-center font-medium">${d.p}</td>
                     <td class="p-3 border-b text-center font-bold text-gray-900 bg-gray-50">${d.l + d.p}</td>
                     <td class="p-3 border-b text-center">
                         <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.verval === 'Sudah' ? 'bg-emerald-100 text-emerald-800':'bg-rose-100 text-rose-800'}">${d.verval}</span>
                     </td>
-                    <td class="p-3 border-b text-center whitespace-nowrap">
+                    <td class="p-3 border-b text-center whitespace-nowrap no-print">
                         <button onclick="editPD(${index})" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button onclick="deleteRow('pd', ${index})" class="text-rose-600 hover:text-rose-900 bg-rose-50 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
                     </td>
@@ -617,7 +702,7 @@
                     <td class="p-3 border-b">
                         <span class="px-2 py-1 rounded text-[10px] font-extrabold ${d.keterisian === 'LENGKAP' ? 'bg-emerald-600 text-white':'bg-rose-600 text-white'}">${d.keterisian || 'LENGKAP'}</span>
                     </td>
-                    <td class="p-3 border-b text-center whitespace-nowrap">
+                    <td class="p-3 border-b text-center whitespace-nowrap no-print">
                         <button onclick="editERapor(${index})" class="text-blue-600 hover:text-blue-900 bg-blue-50 px-2 py-1 rounded mr-1"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button onclick="deleteRow('rep', ${index})" class="text-rose-600 hover:text-rose-900 bg-rose-50 px-2 py-1 rounded"><i class="fa-solid fa-trash"></i></button>
                     </td>
@@ -625,7 +710,7 @@
             `).join('');
         }
 
-        // --- EDIT CONTROLLERS ---
+        // --- CONTROLLERS FOR FORM ACTIONS (DIABAIKAN - SAMA SEPERTI KODE SEBELUMNYA) ---
         function editAkreditasi(index) {
             editIndexAkreditasi = index;
             const item = dataAkreditasi[index];
@@ -686,7 +771,6 @@
             openModal('modal-erapor');
         }
 
-        // --- FORMS SUBMIT OPERATIONS ---
         function saveAkreditasi(e) {
             e.preventDefault();
             const gradeVal = document.getElementById('akr-grade').value;
@@ -771,7 +855,7 @@
             }
         }
 
-        // --- DASHBOARD REAL-TIME STATS & CHARTS ---
+        // --- DASHBOARD CHARTS SYSTEM ---
         function renderDashboard() {
             const totalLembaga = [...new Set([...dataAkreditasi.map(d=>d.npsn), ...dataPD.map(d=>d.npsn)])].length;
             document.getElementById('stat-total-lembaga').innerText = totalLembaga;
@@ -827,6 +911,7 @@
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 11, font: { size: 10 } } } } }
             });
 
+            // LOGIK KONSOLIDASI RATA-RATA 8 STANDAR NASIONAL PENDIDIKAN
             let avgSnp = [0, 0, 0, 0, 0, 0, 0, 0];
             if(dataERapor.length > 0) {
                 dataERapor.forEach(d => {
@@ -836,18 +921,38 @@
                 avgSnp = avgSnp.map(sum => Math.round(sum / dataERapor.length));
             }
 
+            // MODIFIKASI: Menggunakan 8 warna unik yang berbeda untuk tiap standar pendidikan
+            const delapanWarnaSnp = [
+                '#3b82f6', // SKL - Blue
+                '#10b981', // S. Isi - Emerald
+                '#f59e0b', // S. Proses - Amber
+                '#ec4899', // S. Penilaian - Pink
+                '#8b5cf6', // S. PTK - Purple
+                '#06b6d4', // S. Sapras - Cyan
+                '#f97316', // S. Pengelolaan - Orange
+                '#64748b'  // S. Pembiayaan - Slate
+            ];
+
             if(chartSNPInstance) chartSNPInstance.destroy();
             chartSNPInstance = new Chart(document.getElementById('chartSNP'), {
                 type: 'bar',
                 data: {
-                    labels: ['SKL', 'S.Isi', 'S.Proses', 'S.Penilaian', 'S.PTK', 'S.Sapras', 'S.Pengelolaan', 'S.Pembiayaan'],
-                    datasets: [{ data: avgSnp, backgroundColor: avgSnp.map(v => v >= 80 ? '#10b981' : v >= 60 ? '#f59e0b' : '#ef4444'), borderRadius: 4 }]
+                    labels: ['SKL', 'S. Isi', 'S. Proses', 'S. Penilaian', 'S. PTK', 'S. Sapras', 'S. Pengelolaan', 'S. Pembiayaan'],
+                    datasets: [{ 
+                        data: avgSnp, 
+                        backgroundColor: delapanWarnaSnp, // Penerapan array warna unik
+                        borderRadius: 5 
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { min: 0, max: 100, ticks: { callback: value => value + '%' } } }
+                    plugins: { 
+                        legend: { display: false } // Sembunyikan legenda karena label sudah tertera di bawah batang grafik
+                    },
+                    scales: { 
+                        y: { min: 0, max: 100, ticks: { callback: value => value + '%' } } 
+                    }
                 }
             });
         }
